@@ -21,12 +21,18 @@ router.post('/login', (req, res) => {
 router.get('/checkin/:id', (req,res) => {
     const ticketId = req.params.id;
     //TODO: Fix
-    connection.execute(`call check_in(${ticketId}, 1)`, (err, results) => {
+    connection.execute(`call check_in(${ticketId}, 1, @result)`, (err, results) => {
         if (err) {
             console.log(err);
             return res.status(500).json({ type: 'error', message: err });
         }
-        res.json({ type: 'success', message: results});
+    });
+    connection.execute(`select @result`, (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).json({ type: 'error', message: err });
+        }
+        res.json({ type: 'success', message: results[0]});
     });
 });
 
