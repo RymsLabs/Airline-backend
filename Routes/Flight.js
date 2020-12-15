@@ -3,8 +3,6 @@ const connection = require('../Utils/connection');
 
 const router = Router();
 
-
-
 router.get('/remaining/:id', (req, res) => {
     const { id } = req.params;
     connection.execute(`call seatsRemaining(${id}, @remaining)`, (err, results) => {
