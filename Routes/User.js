@@ -34,7 +34,7 @@ connection.execute(`select @result`, (err, results) => {
 
 router.get('/ticket/history/:id', (req, res) => {
     const {id} = req.params;
-    connection.execute(`call ims_proj.user_ticket_history(${id});`, (err, results) => {
+    connection.execute(`call user_ticket_history(${id})`, (err, results) => {
         if (err) {
             console.log(err);
             return res.status(500).json({ type: 'error', message: err });
@@ -42,6 +42,24 @@ router.get('/ticket/history/:id', (req, res) => {
         res.json({ type: 'success', message: results[0]});
     });
 });
+
+router.post('/flight/', (req,res) => {
+    const {userId, flightId} = req.body;
+    connection.execute(`call book_ticket(${userId}, ${flightId}, @result)`, (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).json({ type: 'error', message: err });
+        }
+    });
+
+    connection.execute(`select @result`, (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).json({ type: 'error', message: err });
+        }
+        res.json({ type: 'success', message: results[0]});
+    });
+})
 
 router.delete('/:id', (req, res) => {
     const {id} = req.params;

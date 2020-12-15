@@ -28,7 +28,7 @@ router.post('/filter', (req,res) => {
             console.log(err);
             return res.status(500).json({ type: 'error', message: err });
         }
-        res.json({ type: 'success', message: results[0][0]});
+        res.json({ type: 'success', message: results[0]});
     });
 });
 
