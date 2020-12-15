@@ -34,6 +34,16 @@ router.get('/checkin/:id', (req,res) => {
     });
 });
 
+router.get('/users/', (req,res) => {
+    connection.execute(`SELECT * FROM userdetailswithoutpass`, (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).json({ type: 'error', message: err });
+        }
+        res.json({ type: 'success', message: results});
+    });
+})
+
 
 
 module.exports = router;

@@ -23,7 +23,19 @@ connection.execute(`select @result`, (err, results) => {
 
 router.get('/ticket/history/:id', (req, res) => {
     const {id} = req.params;
-    connection.execute(`call call ims_proj.user_ticket_history(${id});`, (err, results) => {
+    connection.execute(`call ims_proj.user_ticket_history(${id});`, (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).json({ type: 'error', message: err });
+        }
+        res.json({ type: 'success', message: results[0]});
+    });
+});
+
+router.delete('/:id', (req, res) => {
+    const {id} = req.params;
+    // Also deletes ticketId and phonenumbers
+    connection.execute(`call deleteUser(${id})`, (err, results) => {
         if (err) {
             console.log(err);
             return res.status(500).json({ type: 'error', message: err });
