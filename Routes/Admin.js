@@ -33,7 +33,7 @@ router.get('/flight/', (_, res) => {
 });
 
 router.get('/pilot/', (_,res) => {
-    connection.execute('SELECT * from ViewPilotDetails', (err, results) => {
+    connection.execute('SELECT * from viewpilotdetails', (err, results) => {
         if (err) {
             console.log(err);
             return res.status(500).json({ type: 'error', message: err });
@@ -43,7 +43,7 @@ router.get('/pilot/', (_,res) => {
 });
 
 router.post('/reschedule/', (req,res) => {
-    const {flightId, dTime, aTime} = req.body;
+    let {flightId, dTime, aTime} = req.body;
     if (!dTime) {
         dTime = ''
     }

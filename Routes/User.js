@@ -3,6 +3,17 @@ const connection = require('../Utils/connection');
 
 const router = Router();
 
+router.post('/signup', (req, res) => {
+    const {fname, lname, email, addr, password, dob} = req.body;
+    connection.execute(`call signup_user("${fname}","${lname}","${email}","${addr}","${password}","${dob}")`, (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).json({ type: 'error', message: err });
+        }
+        res.json({ status: 'success', message: results[0] });
+    })
+});
+
 router.post('/login', (req, res) => {
     const {email, password} = req.body;
     connection.execute(`call UserLogin("${email}", "${password}",@result)`, (err, results) => {
