@@ -16,19 +16,16 @@ router.post('/signup', (req, res) => {
 
 router.post('/login', (req, res) => {
     const {email, password} = req.body;
-    connection.execute(`call UserLogin("${email}", "${password}",@result)`, (err, results) => {
+    connection.execute(`call UserLogin("${email}", "${password}")`, (err, results) => {
         if (err) {
             console.log(err);
             return res.status(500).json({ type: 'error', message: err });
         }
-    });
-
-connection.execute(`select @result`, (err, results) => {
-    if (err) {
-        console.log(err);
-        return res.status(500).json({ type: 'error', message: err });
-    }
-        res.json({ type: 'success', message: results[0]});
+        if (results) {
+            res.json({ type: 'success', message: results[0][0]});
+        } else {
+            res.json({type: 'success', message: 'Not exists'});
+        }
     });
 });
 
